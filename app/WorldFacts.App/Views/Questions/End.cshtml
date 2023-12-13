@@ -1,0 +1,94 @@
+﻿@using WorldFacts.Library.Models
+@model WorldFacts.App.Models.AnswerDataModel;
+
+@{
+    ViewData["Title"] = "Wyniki ankiet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Wyniki</h2>
+
+<div class="my-3">
+    
+    <h3>Twój wynik to @Model.CorrectAnswers / @Model.TotalQuestions</h3>
+
+    @foreach (var answerData2 in Model.AnswerData)
+    {
+        var question = answerData2.Question;
+        if (question == null)
+        {
+            continue;
+        }
+
+        <div class="border p-3 my-3 rounded">
+
+            <h4>Pytanie</h4>
+            <p>@question.Content</p>
+
+            <table class="table">
+
+                <thead>
+                <tr>
+                    <th>Odpowiedź</th>
+                    <th width="200px">Poprawność</th>
+                    <th width="100px">Procent uczestników</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                @foreach (var answer in question.Answers)
+                {
+                    var answerData = Model.Statistics.QuestionsAnswersInfo.First(data => data.QuestionId == question.QuestionId && data.AnswerId == answer.AnswerId);
+                    var percentage = answerData.AnswerCount / (double)answerData.QuestionCount;
+                    var percentageStr = percentage.ToString("0.00%");
+                    if (answerData.QuestionCount == 0)
+                    {
+                        percentageStr = "-";
+                    }
+
+                    var rowClass = "";
+                    var answerText = "";
+
+                    var isUserAnswer = answerData2.AnswerId == answer.AnswerId;
+
+                    if (answer.AnswerType == AnswerType.CORRECT)
+                    {
+                        if (isUserAnswer) rowClass = "table-success";
+                        answerText = "Poprawna";
+                    }
+                    else if (answer.AnswerType == AnswerType.INCORRECT)
+                    {
+                        if (isUserAnswer) rowClass = "table-warning";
+                        answerText = "Niepoprawna";
+                    }
+                    else if (answer.AnswerType == AnswerType.VERY_INCORRECT)
+                    {
+                        if (isUserAnswer) rowClass = "table-danger";
+                        answerText = "Bardzo niepoprawna";
+                    }
+
+                    <tr class="@rowClass">
+                        <td>
+                            @answer.Content
+                        </td>
+
+                        <td>
+                            @answerText
+                        </td>
+                        
+                        <td>
+                            @percentageStr
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <h4>Komentarz</h4>
+            <p>
+               @Html.Raw(answerData2.Answer?.Comment)
+            </p>
+        </div>
+    }
+</div>
+
+<p><a asp-controller="Home" asp-action="Index" class="btn btn-primary">Wróć na stronę główną</a></p>

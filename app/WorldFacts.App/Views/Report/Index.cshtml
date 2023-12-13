@@ -1,0 +1,27 @@
+﻿@model WorldFacts.App.Models.HeadersData
+
+@{
+    ViewData["Title"] = "Prezentacje";
+}
+<div class="d-table h-100 mt-5">
+
+    <h3>Prezentacje</h3>
+    <div class="my-3">
+        
+        <p>Poniżej znajdują się odnośniki do prezentacji zawierającej wykresy oparte na danych z World Bank. Wykresy te przedstawiają globalne zmiany w różnych obszarach, takich jak ubóstwo, współczynniki dzietności, śmiertelność niemowląt i oczekiwana długość życia. Możesz zobaczyć, jak te wskaźniki ewoluowały na przestrzeni ostatnich lat. Zapraszamy do zapoznania się z danymi.</p>
+
+        <p>Wybierz odnośnik:</p>
+
+        <ul>
+            @foreach (var item in Model.Headers)
+            {
+                <li>
+                    <a href="/report/@item.NarrativeId">@item.Title</a>
+                </li>
+            }
+        </ul>
+    </div>
+    <p>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Wróć</a>
+    </p>
+</div>

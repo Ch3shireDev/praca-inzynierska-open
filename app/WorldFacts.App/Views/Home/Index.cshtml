@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Strona domowa";
+}
+
+<div class="text-center my-5">
+    <h2 class="mb-5">World Facts</h2>
+    <p>
+        Witaj na naszej stronie poświęconej analizie postępów, które dokonały się na świecie przez ostatnie 60 lat!
+        Korzystając z wiarygodnych danych pochodzących ze Światowego Banku, pragniemy przedstawić Ci fascynującą podróż
+        przez dekady pełne transformacji, rozwijania się technologii, a przede wszystkim - poprawy jakości życia wielu
+        społeczności na całym świecie. Te lata były świadkami niezwykłych zmian w wielu obszarach, takich jak zdrowie,
+        edukacja, gospodarka i infrastruktura.
+    </p>
+
+    <p>
+        Kiedy patrzymy na świat poprzez pryzmat statystyk, możemy zauważyć niesamowite historie sukcesu i adaptacji.
+        Od osiągnięć w dziedzinie medycyny, które przyczyniły się do wydłużenia średniej długości życia, po niezwykłe
+        skoki w dostępie do edukacji w wielu krajach rozwijających się. Nasza strona oferuje głębokie spojrzenie na te
+        pozytywne zmiany, dając Ci szansę zrozumienia, jak wspólne wysiłki ludzkości przyczyniły się do budowy lepszego
+        jutra dla wszystkich nas.
+    </p>
+    <div class="my-5">
+        <p>
+            <a class="btn btn-primary" asp-controller="Questions" asp-action="Index">Pokaż ankietę</a>
+            <a class="btn btn-primary" asp-controller="QuestionsResults" asp-action="Index">Pokaż wyniki</a>
+        </p>
+        <p>
+            <a class="btn btn-primary" asp-controller="Report" asp-action="Index">Pokaż prezentacje</a>
+        </p>
+    </div>
+</div>

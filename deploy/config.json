@@ -1,0 +1,8 @@
+{
+    "reportPath": "../report/worldbank-report-azure.pbix",
+    "reportName": "Raport WORLDBANK",
+    "workspaceName": "Workspace WORLDBANK",
+    "databaseName": "WORLDBANK",
+    "databaseBackupPath": "../report/WORLDBANK.bacpac",
+    "location": "polandcentral"
+}

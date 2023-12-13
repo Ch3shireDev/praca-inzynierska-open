@@ -1,0 +1,103 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using WorldFacts.App.Models
+@model WorldFacts.Library.Models.QuestionData
+
+@{
+    ViewData["Title"] = "Ankieta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var index = 1;
+    var questionId = $"question-{index}";
+}
+<div class="d-table h-100 m-auto w-50 mt-5 text-center">
+    <div id="@questionId" class="question">
+        <h3>Pytanie @Model.QuestionId</h3>
+        <p class="my-5">@Model.Content</p>
+        @foreach (var answer in Model.Answers)
+        {
+            <p class="text-center">
+                <button class="answer-button btn btn-info w-50"
+                        data-answerid="@answer.AnswerId"
+                        data-questionid="@answer.QuestionId"
+                        data-content="@answer.Content"
+                        data-comment="@answer.Comment"
+                        data-answertype="@answer.AnswerType">
+                    @answer.Content
+                </button>
+            </p>
+        }
+        <p id="answer-comment"></p>
+    </div>
+
+    @{
+        var showAnswers = false;
+    }
+
+    @if (showAnswers)
+    {
+        @if (Model.NextQuestionId != 0)
+        {
+            <a id="nextQuestionButton" class="btn btn-primary" style="display: none"
+               asp-controller="Questions"
+               asp-action="Show"
+               asp-route-questionId="@Model.NextQuestionId">
+                Następne pytanie
+            </a>
+        }
+        else
+        {
+            <a id="nextQuestionButton" class="btn btn-primary" style="display: none"
+               asp-controller="Questions"
+               asp-action="End">
+                Zakończ ankietę
+            </a>
+        }
+    }
+
+</div>
+
+@section scripts{
+
+    <script>
+    $('.answer-button').click(function () {
+        
+        var questionId = $(this).data('questionid');
+        var answerId = $(this).data('answerid');
+
+        var showAnswers = '@showAnswers' === '@true';
+
+        $.cookie(`question-${questionId}`, answerId);
+
+        var url = "@Url.Action("PostAnswer", "QuestionsResults")";
+        
+        $.post(url, {
+            @nameof(PostAnswerData.QuestionId): $(this).data('questionid'),
+            @nameof(PostAnswerData.AnswerId): answerId
+        },
+        function(){
+                if(showAnswers) return;
+                
+                if(@Model.NextQuestionId != 0)
+                {
+                    location.href = "@Url.Action("Show", "Questions", new { questionId = Model.NextQuestionId })";
+                }
+                else {
+                    location.href = "@Url.Action("End", "Questions")";
+                }
+            }
+        );
+        
+
+        if(showAnswers){
+
+            var comment = $(this).data('comment');
+            $("#answer-comment").text(comment);
+            $('.answer-button').off()
+            var answerClassName = this.id;
+            $(this).show();
+            $('#nextQuestionButton').show();
+        }
+
+
+    });
+</script>
+}

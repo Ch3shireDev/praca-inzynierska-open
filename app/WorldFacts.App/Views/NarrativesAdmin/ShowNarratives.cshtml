@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Panel administratora - Prezentacje";
+    @model WorldFacts.App.Models.AdminNarrativesModel;
+
+
+    
+
+    
+
+    }
+
+<h2>Panel administratora - Prezentacje</h2>
+<div class="my-3">
+    <a class="btn btn-primary" asp-controller="NarrativesAdmin" asp-action="CreateNarrative">Dodaj prezentację</a>
+    <a class="btn btn-info" asp-controller="Admin" asp-action="Index">Wróć</a>
+</div>
+@for (var i = 0; i < Model.Narratives.Count; i++)
+{
+    var narrative = Model.Narratives[i];
+
+    <div class="border p-3 my-1">
+        <h2>@narrative.Title</h2>
+        <p>@narrative.Description</p>
+        <a class="btn btn-primary" asp-controller="NarrativesAdmin" asp-action="ShowUpdateNarrative" asp-route-narrativeId="@narrative.NarrativeId">Edytuj</a>
+        <button class="btn btn-danger" id="delete-@i">Kasuj</button>
+    </div>
+
+    <script>
+        $("#delete-@i").click(function () {
+            if (confirm("Czy na pewno chcesz usunąć prezentację?")) {
+                var narrativeId = "@narrative.NarrativeId";
+                var url = `/admin/delete-narrative/${narrativeId}`;
+                var data = { narrativeId: narrativeId };
+
+                $.ajax({
+                    url: url,
+                    type: 'DELETE',
+                    success: function () {
+                        window.location.href = '@Url.Action("ShowNarratives", "NarrativesAdmin")';
+                    }
+                });
+            }
+        });
+    </script>
+}
+
+<div class="my-3">
+    <a class="btn btn-primary" asp-controller="NarrativesAdmin" asp-action="CreateNarrative">Dodaj prezentację</a>
+    <a class="btn btn-info" asp-controller="Admin" asp-action="Index">Wróć</a>
+</div>

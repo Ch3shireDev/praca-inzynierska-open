@@ -1,0 +1,12 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Panel administratora - Prezentacje";
+    @model WorldFacts.Library.Models.NarrativeData;
+}
+
+<h2>Panel administratora - edytuj prezentację</h2>
+<a class="btn btn-info" asp-action="ShowNarratives">Wróć</a>
+
+@await Html.PartialAsync("Shared/_NarrativeEditor", Model)
+
+<a class="btn btn-info" asp-action="ShowNarratives">Wróć</a>

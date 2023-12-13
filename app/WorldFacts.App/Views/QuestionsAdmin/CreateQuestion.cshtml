@@ -1,0 +1,19 @@
+﻿@model WorldFacts.Library.Models.QuestionData
+@{
+    ViewData["Title"] = "Panel administratora - Dodaj nowe pytanie";
+}
+
+<h2>Panel administratora - Dodaj nowe pytanie</h2>
+
+<div class="my-3">
+    <a asp-action="ShowQuestions" class="btn btn-info">Wróć</a>
+</div>
+
+<div class="px-5 mb-5">
+    <div class="my-3">
+        <h3>Nowe pytanie</h3>
+    </div>
+    @await Html.PartialAsync("Shared/_QuestionEditor", Model)
+</div>
+
+<a asp-action="ShowQuestions" class="btn btn-info mb-3">Wróć</a>

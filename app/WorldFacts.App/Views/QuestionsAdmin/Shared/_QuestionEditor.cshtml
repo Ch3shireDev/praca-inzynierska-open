@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using WorldFacts.Library.Helpers
+@using WorldFacts.Library.Models
+@{
+    @model WorldFacts.Library.Models.QuestionData;
+}
+
+<form asp-action="UpdateQuestion" method="post">
+
+    <ul class="list-group my-1">
+        <li class="list-group-item">
+            <div class="form-group">
+                <input class="form-control-plaintext" type="hidden" name="QuestionId" value="@Model.QuestionId" readonly/>
+                <textarea class="form-control" type="text" name="Content">@Model.Content</textarea>
+            </div>
+        </li>
+        @for (var i = 0; i < Model.Answers.Count; i++)
+        {
+            <li class="list-group-item">
+                <div class="form-group">
+                    <fieldset>
+                        <input name="Answers[@i].AnswerId" value="@Model.Answers[i].AnswerId" type="hidden" />
+                        <label class="col-form-label">Odpowiedź</label>
+
+
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control"
+                                   name="Answers[@i].Content"
+                                   value="@Model.Answers[i].Content"/>
+                            <select class="form-select" name="Answers[@i].AnswerType" style="max-width:200px">
+                                @foreach (AnswerType option in Enum.GetValues(typeof(AnswerType)))
+                                {
+                                    @if (option == Model.Answers[@i].AnswerType)
+                                    {
+
+                                        <option value="@option" selected>@option.GetDescription()</option>
+                                    }
+                                    else
+                                    {
+
+                                        <option value="@option">@option.GetDescription()</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <label class="col-form-label">Komentarz</label>
+                        <textarea class="form-control"
+                                  name="Answers[@i].Comment"
+                                      rows="2">@Model.Answers[i].Comment</textarea>
+
+
+                    </fieldset>
+                </div>
+            </li>
+        }
+    </ul>
+    <div class="my-3">
+        <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+        <button type="reset" class="btn btn-secondary">Cofnij</button>
+    </div>
+</form>

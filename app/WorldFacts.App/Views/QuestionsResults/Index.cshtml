@@ -1,0 +1,84 @@
+﻿@using WorldFacts.Library.Models
+@model WorldFacts.Library.Models.QuestionsResultsStatistics;
+
+@{
+    ViewData["Title"] = "Wyniki ankiet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Wyniki ankiet</h2>
+
+<div class="my-3">
+
+
+<p class="mb-3"><a asp-controller="Home" asp-action="Index" class="btn btn-primary">Wróć</a></p>
+
+    @foreach (var question in Model.Questions)
+    {
+        <div class="border p-3 my-3 rounded">
+            
+            <h4>Pytanie</h4>
+            <p>@question.Content</p>
+
+            <table class="table">
+
+                <thead>
+                <tr>
+                    <th>Odpowiedź</th>
+                    <th width="200px">Poprawność</th>
+                    <th width="100px">Procent</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                @foreach (var answer in question.Answers)
+                {
+                    var answerData = Model.QuestionsAnswersInfo.First(data => data.QuestionId == question.QuestionId && data.AnswerId == answer.AnswerId);
+
+                    var percentage = answerData.AnswerCount / (double)answerData.QuestionCount;
+                    var percentageStr = percentage.ToString("0.00%");
+                    if (answerData.QuestionCount == 0)
+                    {
+                        percentageStr = "-";
+                    }
+
+                    var rowClass = "";
+                    var answerText = "";
+
+                    if (answer.AnswerType == AnswerType.CORRECT)
+                    {
+                        rowClass = "table-success";
+                        answerText = "Poprawna";
+                    }
+                    else if (answer.AnswerType == AnswerType.INCORRECT)
+                    {
+                        rowClass = "table-warning";
+                        answerText = "Niepoprawna";
+                    }
+                    else if (answer.AnswerType == AnswerType.VERY_INCORRECT)
+                    {
+                        rowClass = "table-danger";
+                        answerText = "Bardzo niepoprawna";
+                    }
+
+                    <tr class="@rowClass">
+                        <td>
+                            @answer.Content
+                        </td>
+
+                        <td>
+                            @answerText
+                        </td>
+
+                        <td>
+                            @percentageStr
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+    
+<p class="my-3"><a asp-controller="Home" asp-action="Index" class="btn btn-primary">Wróć</a></p>
+</div>

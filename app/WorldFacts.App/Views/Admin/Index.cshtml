@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Panel administratora</h2>
+
+<ul>
+    <li>
+        <a  
+            asp-controller="QuestionsAdmin"
+            asp-action="ShowQuestions">
+            Pytania
+        </a>
+    </li>
+    <li>
+        <a asp-controller="NarrativesAdmin"
+           asp-action="ShowNarratives">
+            Prezentacje
+        </a>
+    </li>
+</ul>
+

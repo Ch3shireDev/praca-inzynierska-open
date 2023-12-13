@@ -1,0 +1,27 @@
+﻿@model WorldFacts.App.Models.ReportData
+
+@{
+    ViewData["Title"] = Model.Details.Title; 
+}
+
+<h1>@Model.Details.Title</h1>
+
+
+
+@await Html.PartialAsync("Shared/_Report", Model.Config)
+ 
+<div class="my-3">
+    <p>@Model.Details.Description</p>
+</div>
+
+<div class="my-3">
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <a 
+        asp-controller="NarrativesAdmin" 
+        asp-action="ShowUpdateNarrative" 
+        asp-route-narrativeId="@Model.Details.NarrativeId"   
+    class="btn btn-primary">Edytuj</a>
+}
+    <a asp-action="Index" class="btn btn-secondary">Wróć</a>
+</div>

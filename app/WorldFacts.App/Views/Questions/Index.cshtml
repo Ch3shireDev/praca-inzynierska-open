@@ -1,0 +1,17 @@
+﻿@model WorldFacts.Library.Models.PollData
+
+@{
+    ViewData["Title"] = "Ankieta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="text-center">
+    <h2 class="my-5">Ankieta</h2>
+    <p>
+        Witaj w ankiecie dotyczącej globalnych wskaźników społeczno-ekonomicznych i zdrowotnych! Ankieta ta ma na celu zbadanie poziomu świadomości społecznej na temat kluczowych zagadnień, takich jak ubóstwo, śmiertelność, oczekiwana długość życia i wiele innych. W erze globalizacji i szybkich zmian, zrozumienie tych kwestii jest nie tylko ważne, ale również kluczowe dla podejmowania informowanych decyzji oraz dla wspierania zrównoważonego rozwoju.
+    </p>
+    <p class="my-5">
+        <a asp-action="FirstQuestion" class="btn-primary btn">Rozpocznij</a>
+        <a asp-controller="Home" asp-action="Index" class="btn-secondary btn">Wróć</a>
+    </p>
+</div>

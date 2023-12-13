@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Panel administratora - Ankiety";
+    @model WorldFacts.App.Models.AdminQuestionsModel;
+
+
+    }
+
+<h2>Panel administratora - Ankiety</h2>
+
+<div class="my-3">
+    <a class="btn btn-primary" asp-action="CreateQuestion">Dodaj pytanie</a>
+    <a class="btn btn-info" asp-controller="Admin" asp-action="Index">Wróć</a>
+</div>
+@foreach (var question in Model.Questions)
+{
+    var index = Model.Questions.IndexOf(question) + 1;
+
+    <div class="border px-5 mb-5">
+        <h3 class="pt-3">Pytanie @index</h3>
+        @await Html.PartialAsync("Shared/_QuestionEditor", question)
+    </div>
+}
+
+<div class="mb-3">
+    <a class="btn btn-primary" asp-action="CreateQuestion">Dodaj pytanie</a>
+    <a class="btn btn-info" asp-controller="Admin" asp-action="Index">Wróć</a>
+</div>

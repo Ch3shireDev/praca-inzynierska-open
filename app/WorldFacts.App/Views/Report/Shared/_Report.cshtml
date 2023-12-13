@@ -1,0 +1,100 @@
+﻿@{
+    @model WorldFacts.Library.Models.PowerBIEmbedConfig;
+
+
+    
+
+    }
+
+<div class="text-center">
+    <div id="reportContainer"></div>
+</div>
+
+<script>
+        // Read embed application token from Model
+        var accessToken = "@Model.EmbedToken.Token";
+
+        // Read embed URL from Model
+        var embedUrl = "@Html.Raw(Model.EmbedUrl)";
+
+        // Read report QuestionAnswerId from Model
+        var embedReportQuestionAnswerId = "@Model.Id";
+
+        // Get models. models contains enums that can be used.
+        var models = window['powerbi-client'].models;
+
+        // Embed configuration used to describe the what and how to embed.
+        // This object is used when calling powerbi.embed.
+        // This also includes settings and options such as filters.
+        // You can find more information at https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details.
+        var config = {
+            type: 'report',
+            tokenType: models.TokenType.Embed,
+            accessToken: accessToken,
+            embedUrl: embedUrl,
+            id: embedReportQuestionAnswerId,
+            permissions: models.Permissions.All,
+            settings: {
+                filterPaneEnabled: true,
+                navContentPaneEnabled: true,
+
+                panes: {
+                    filters: { expanded: false, visible: false },
+                    pageNavigation: { visible: false }
+                }
+            }
+        };
+        
+        function runReport(){
+            // Get a reference to the embedded report HTML element
+            var reportContainer = $('#reportContainer');
+            
+            var width = reportContainer.width();
+            
+            var height = parseInt(width) * 0.56;
+
+            reportContainer.css('height', `${height}px`)
+            // Embed the report and display it within the div container.
+            var report = powerbi.embed(reportContainer[0], config);
+
+            report.on('loaded', function () {
+                report.getPages().then(pages => {
+                    var pageDisplayName = "@Model.ReportPageId";
+
+                    function compare(x, y) {
+                        if (x === undefined) return false;
+                        if (x === null) return false;
+                        if (x === y) return true;
+                        return x.replaceAll(" ", "_").toLowerCase() === y.replaceAll(" ", "_").toLowerCase();
+                    }
+
+
+                var pagesInfo = pages.map(p => {
+                    return {
+                        reportPageId: p.displayName.replaceAll(" ", "_").toLowerCase(),
+                        reportDisplayName: p.displayName
+                    }
+                });
+
+                    $(document).trigger("reportPagesLoaded", [pagesInfo]);
+
+                $(document).on("reportSetPage", function (event, reportPageId) {
+                    var page = pages.find(p => compare(p.displayName, reportPageId));
+
+                    if (page !== undefined) {
+                        report.setPage(page.name).catch(error => console.error(error));
+                    }
+                    else {
+                        console.error(`Cant find page with name ${reportPageId}`);
+                        console.info(`Available page names: ${pagesInfo}`)
+                    }
+                    });
+
+                $(document).trigger("reportSetPage", [pageDisplayName])
+                });
+                
+            });
+        }
+
+        $(document).ready(runReport);
+    </script>

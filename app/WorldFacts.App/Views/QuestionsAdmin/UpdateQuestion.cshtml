@@ -1,0 +1,10 @@
+﻿@{
+    ViewData["Title"] = "Panel administratora - Prezentacje";
+    @model WorldFacts.Library.Models.QuestionData;
+}
+
+<h2>Panel administratora - edytuj pytanie</h2>
+
+@await Html.PartialAsync("Shared/_QuestionEditor", Model)
+
+<a class="btn btn-info mb-3" asp-action="ShowQuestions">Wróć</a>

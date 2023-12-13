@@ -1,0 +1,73 @@
+﻿@{
+    @model WorldFacts.Library.Models.NarrativeData;
+    }
+
+<div class="form-group my-3 border p-5">
+
+    <form asp-action="UpdateNarrative" method="post">
+
+        <input readonly type="hidden" name="NarrativeId" value="@Model.Narrative.NarrativeId"/>
+
+        @await Html.PartialAsync("../Report/Shared/_Report", Model.Config)
+
+        <div class="form-group my-3">
+            <label>Identyfikator raportu</label>
+
+            <select class="form-select" value="@Model.Narrative.ReportPageId" name="ReportPageId" id="reportPageIdSelect">
+
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Tytuł raportu</label>
+            <input type="text" class="form-control" name="Title" value="@Model.Narrative.Title"/>
+        </div>
+        <div class="form-group">
+            <label>Opis</label>
+            <textarea class="form-control" type="text" name="Description" rows="5">@Model.Narrative.Description</textarea>
+        </div>
+        <div class="my-3">
+            <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+            @if (Model.Narrative.NarrativeId != 0)
+            {
+                <button type="button" id="delete-narrative" class="btn btn-danger">Kasuj</button>
+            }
+            <button type="reset" class="btn btn-secondary">Cofnij zmiany</button>
+        </div>
+    </form>
+</div>
+
+
+<script>
+    $(document).on("reportPagesLoaded", function (event, pagesInfo) {
+        
+        $('#reportPageIdSelect').empty();
+        $.each(pagesInfo, function (index, value) {
+            $('#reportPageIdSelect').append($('<option>').text(value.reportDisplayName).attr('value', value.reportPageId));
+        });
+        
+        $('#reportPageIdSelect').val('@Model.Narrative.ReportPageId');
+        
+        $('#reportPageIdSelect').change(function() {
+            var pageDisplayName = $('#reportPageIdSelect option:selected').val();
+            $(document).trigger("reportSetPage", [pageDisplayName])
+        });
+
+    });
+    
+    $('#delete-narrative').click(function() {
+        if (confirm("Czy na pewno chcesz usunąć prezentację?")) {
+            var narrativeId = $('input[name="NarrativeId"]').val(); 
+            var url = `/admin/delete-narrative/${narrativeId}`;
+            var data = { narrativeId: narrativeId };
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                success: function () {
+                    window.location.href = '@Url.Action("ShowNarratives", "NarrativesAdmin")';
+                }
+            });
+        }
+    })
+
+</script>
